@@ -1,4 +1,5 @@
 #include "Player.h"
+#include "TextureHolder.h"
 #include <cmath>
 
 Player::Player()
@@ -8,8 +9,8 @@ Player::Player()
     m_MaxHealth = START_HEALTH;
 
     // Associate a texture with the sprite
-    m_Texture.loadFromFile("/home/alanrostin/learn/gamedev/code/game-prog/zombie-arena/graphics/player.png");
-    m_Sprite.setTexture(m_Texture);
+    m_Sprite = Sprite(TextureHolder::GetTexture(
+        "graphics/player.png"));
 
     // Set the origin of the sprite to the center
     m_Sprite.setOrigin(25, 25);
