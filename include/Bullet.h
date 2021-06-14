@@ -22,7 +22,7 @@ class Bullet
         // horizontally and vertically each frame?
         // These values will be derived from m_BulletSpeed
         float m_BulletDistanceX;
-        float m_BUlletDistanceY;
+        float m_BulletDistanceY;
 
         // Some boundaries so the bullet doesn't fly forever
         float m_MaxX;
