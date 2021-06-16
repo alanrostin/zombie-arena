@@ -401,6 +401,18 @@ int main()
                     }
                 }
             }
+
+            // Has the player touched health pickup
+            if (player.getPosition().intersects(healthPickup.getPosition()) && healthPickup.isSpawned())
+            {
+                player.increaseHealthLevel(healthPickup.gotIt());
+            }
+
+            // Has the player touched ammo pickup
+            if (player.getPosition().intersects(ammoPickup.getPosition()) && ammoPickup.isSpawned())
+            {
+                bulletsSpare += ammoPickup.gotIt();
+            }
         }
 
         /*
