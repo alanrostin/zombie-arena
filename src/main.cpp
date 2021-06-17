@@ -1,5 +1,5 @@
+#include <sstream>
 #include <SFML/Graphics.hpp>
-
 #include "ZombieArena.h"
 #include "Player.h"
 #include "TextureHolder.h"
@@ -89,6 +89,103 @@ int main()
     int score = 0;
     int hiScore = 0;
 
+    // For the home/game over screen
+    Sprite spriteGameOver;
+    Texture textureGameOver = TextureHolder::GetTexture("graphics/background.png");
+    spriteGameOver.setTexture(textureGameOver);
+    spriteGameOver.setPosition(0, 0);
+
+    // Create a view for HUD
+    View hudView(sf::FloatRect(0, 0, resolution.x, resolution.y));
+
+    // Get a sprite for the ammo icon
+    Sprite spriteAmmoIcon;
+    Texture textureAmmoIcon = TextureHolder::GetTexture("graphics/ammo_icon.png");
+    spriteAmmoIcon.setTexture(textureAmmoIcon);
+    spriteAmmoIcon.setPosition(20, 500);
+
+    // Load the font
+    Font font;
+    font.loadFromFile("fonts/zombiecontrol.ttf");
+
+    // Paused
+    Text pausedText;
+    pausedText.setFont(font);
+    pausedText.setCharacterSize(155);
+    pausedText.setFillColor(Color::White);
+    pausedText.setPosition(400, 400);
+    pausedText.setString("Press Enter to Continue");
+
+    // Game Over
+    Text gameOverText;
+    gameOverText.setFont(font);
+    gameOverText.setCharacterSize(125);
+    gameOverText.setFillColor(Color::White);
+    gameOverText.setPosition(250, 550);
+    gameOverText.setString("Press Enter to Play");
+
+    // Leveling Up
+    Text levelUpText;
+    levelUpText.setFont(font);
+    levelUpText.setCharacterSize(80);
+    levelUpText.setFillColor(Color::White);
+    levelUpText.setPosition(150, 250);
+    std::stringstream levelUpStream;
+    levelUpStream << 
+        "1- Increased rate of fire\n" << 
+        "2- Increased clip size(next reload)\n" << 
+        "3- Increased max health\n" << 
+        "4- Increased run speed\n" << 
+        "5- More and better health pickups\n" << 
+        "6- More and better ammo pickups";
+    levelUpText.setString(levelUpStream.str());
+
+    // Ammo
+    Text ammoText;
+    ammoText.setFont(font);
+    ammoText.setCharacterSize(55);
+    ammoText.setFillColor(Color::White);
+    ammoText.setPosition(200, 500);
+
+    // Score
+    Text scoreText;
+    scoreText.setFont(font);
+    scoreText.setCharacterSize(55);
+    scoreText.setFillColor(Color::White);
+    scoreText.setPosition(20, 0);
+
+    // Hi Score
+    Text hiScoreText;
+    hiScoreText.setFont(font);
+    hiScoreText.setCharacterSize(55);
+    hiScoreText.setFillColor(Color::White);
+    hiScoreText.setPosition(1400, 0);
+    std::stringstream s;
+    s << "Hi Score:" << hiScore;
+    hiScoreText.setString(s.str());
+
+    // Zombies remaining
+    Text zombiesRemainingText;
+    zombiesRemainingText.setFont(font);
+    zombiesRemainingText.setCharacterSize(55);
+    zombiesRemainingText.setFillColor(Color::White);
+    zombiesRemainingText.setPosition(1500, 500);
+    zombiesRemainingText.setString("Zombies: 100");
+
+    // Wave number
+    int wave = 0;
+    Text waveNumberText;
+    waveNumberText.setFont(font);
+    waveNumberText.setCharacterSize(55);
+    waveNumberText.setFillColor(Color::White);
+    waveNumberText.setPosition(1250, 500);
+    waveNumberText.setString("Wave: 0");
+
+    // Health bar
+    RectangleShape healthBar;
+    healthBar.setFillColor(Color::Red);
+    healthBar.setPosition(450, 500);
+    
     // The main game loop
     while (window.isOpen())
     {
