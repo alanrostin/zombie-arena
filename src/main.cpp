@@ -185,6 +185,12 @@ int main()
     RectangleShape healthBar;
     healthBar.setFillColor(Color::Red);
     healthBar.setPosition(450, 500);
+
+    // When did we last update the HUD?
+    int framesSinceLastHUDUpdate = 0;
+
+    // How often (in frames) should we update the HUD
+    int fpsMeasurementFrameInterval = 1000;
     
     // The main game loop
     while (window.isOpen())
@@ -510,6 +516,45 @@ int main()
             {
                 bulletsSpare += ammoPickup.gotIt();
             }
+
+            // Size up the health bar
+            healthBar.setSize(Vector2f(player.getHealth() * 3, 50));
+
+            // Increment the number of frames since the previous update
+            framesSinceLastHUDUpdate++;
+
+            // Re-calculate every fpsMeasurementFrameInterval frames
+            if (framesSinceLastHUDUpdate > fpsMeasurementFrameInterval)
+            {
+                // Update game HUD text
+                std::stringstream ssAmmo;
+                std::stringstream ssScore;
+                std::stringstream ssHiScore;
+                std::stringstream ssWave;
+                std::stringstream ssZombiesAlive;
+
+                // Update the ammo text
+                ssAmmo << bulletsInClip << "/" << bulletsSpare;
+                ammoText.setString(ssAmmo.str());
+
+                // Update the score text
+                ssScore << "Score:" << score;
+                scoreText.setString(ssScore.str());
+
+                // Update the hi score text
+                ssHiScore << "Hi Score:" << hiScore;
+                hiScoreText.setString(ssHiScore.str());
+
+                // Update the wave
+                ssWave << "Wave:" << wave;
+                waveNumberText.setString(ssWave.str());
+
+                // Update the remaining zombies text
+                ssZombiesAlive << "Zombies:" << numZombiesAlive;
+                zombiesRemainingText.setString(ssZombiesAlive.str());
+
+                framesSinceLastHUDUpdate = 0;
+            }
         }
 
         /*
@@ -560,21 +605,37 @@ int main()
 
             // Draw the crosshair
             window.draw(spriteCrosshair);
+
+            // Switch to the HUD view
+            window.setView(hudView);
+
+            // Draw all the HUD elements
+            window.draw(spriteAmmoIcon);
+            window.draw(ammoText);
+            window.draw(scoreText);
+            window.draw(hiScoreText);
+            window.draw(healthBar);
+            window.draw(waveNumberText);
+            window.draw(zombiesRemainingText);
         }
 
         if (state == State::LEVELING_UP)
         {
-
+            window.draw(spriteGameOver);
+            window.draw(levelUpText);
         }
 
         if (state == State::PAUSED)
         {
-
+            window.draw(pausedText);
         }
 
         if (state == State::GAME_OVER)
         {
-
+            window.draw(spriteGameOver);
+            window.draw(gameOverText);
+            window.draw(scoreText);
+            window.draw(hiScoreText);
         }
 
         window.display();
